@@ -6,10 +6,11 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
+COPY packages /app/packages
 COPY requirements.txt .
 
-RUN pip install --upgrade pip
-RUN pip install --default-timeout=100 --no-cache-dir -r requirements.txt
+RUN pip install --upgrade pip setuptools wheel
+RUN pip install --no-cache-dir --find-links=/app/packages -r requirements.txt
 
 COPY . .
 
