@@ -1,19 +1,22 @@
-FROM python:3.9-slim
+FROM python:3.9-alpine
 
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    && rm -rf /var/lib/apt/lists/*
+# 安装系统依赖
+RUN apk add --no-cache build-base
 
+# 设置工作目录
 WORKDIR /app
 
-COPY packages /app/packages
+# 复制requirements.txt到工作目录
 COPY requirements.txt .
 
-RUN pip install --upgrade pip setuptools wheel
-RUN pip install --no-cache-dir --find-links=/app/packages -r requirements.txt
+# 安装Python依赖
+RUN pip install --no-cache-dir -r requirements.txt
 
+# 复制应用代码到工作目录
 COPY . .
 
+# 暴露端口
 EXPOSE 5000
 
-CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:5000", "app:app"]
+# 定义启动命令
+CMD ["gunicorn", "-w", "2", "-b", "0.0.0.0:5000", "app:app"]
