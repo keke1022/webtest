@@ -1,5 +1,7 @@
-env
-__pycache__
+env/
+__pycache__/
 demo_models
 temp_audio.wav
 .DS_Store
+node_modules/
+.vscode/
